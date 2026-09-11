@@ -251,3 +251,40 @@
 @utility animate-flicker {
   animation: flicker 1.1s ease-in-out infinite;
 }
+
+/* Birthday message scrollbar */
+.birthday-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.75) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.birthday-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.birthday-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  margin: 8px 0;
+}
+
+.birthday-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #f6d365,
+    #d4af37,
+    #b8860b
+  );
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.birthday-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #ffeaa7,
+    #f6d365,
+    #d4af37
+  );
+}

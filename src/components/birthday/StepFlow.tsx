@@ -73,34 +73,56 @@ type Step = {
   hint?: string;
 };
 
+// const STEPS: Step[] = [
+//   { label: "Welcome", Component: Welcome },
+//   { label: "Gallery", Component: MemoryGallery },
+//   { label: "Slideshow", Component: Slideshow },
+//   { label: "Notes", Component: LoveNotes },
+//   { label: "Timeline", Component: MemoryMap },
+//   { label: "Gifts", Component: Gifts, gate: "gifts", hint: "Unwrap the gifts to continue." },
+//   { label: "Cake", Component: Cake, gate: "cake", hint: "Blow the candles and cut the cake." },
+//   {
+//     label: "Balloons",
+//     Component: BalloonGame,
+//     gate: "balloons",
+//     hint: "Pop the balloons to continue.",
+//   },
+//   { label: "Puzzle", Component: Puzzle, gate: "puzzle", hint: "Solve the puzzle to continue." },
+//   { label: "Scratch", Component: ScratchCard, gate: "scratch", hint: "Scratch the card fully." },
+//   { label: "Wheel", Component: SpinWheel, gate: "wheel", hint: "Spin the wheel to continue." },
+//   { label: "Quiz", Component: Quiz, gate: "quiz", hint: "Finish the quiz to continue." },
+//   {
+//     label: "Treasure",
+//     Component: TreasureHunt,
+//     gate: "treasure",
+//     hint: "Crack every clue to continue.",
+//   },
+//   { label: "Secret", Component: SecretGallery },
+//   { label: "Finale", Component: FinaleStep },
+// ];
 const STEPS: Step[] = [
   { label: "Welcome", Component: Welcome },
   { label: "Gallery", Component: MemoryGallery },
   { label: "Slideshow", Component: Slideshow },
   { label: "Notes", Component: LoveNotes },
   { label: "Timeline", Component: MemoryMap },
-  { label: "Gifts", Component: Gifts, gate: "gifts", hint: "Unwrap the gifts to continue." },
-  { label: "Cake", Component: Cake, gate: "cake", hint: "Blow the candles and cut the cake." },
+  { label: "Gifts", Component: Gifts },
+  { label: "Cake", Component: Cake},
   {
     label: "Balloons",
-    Component: BalloonGame,
-    gate: "balloons",
-    hint: "Pop the balloons to continue.",
+    Component: BalloonGame
   },
-  { label: "Puzzle", Component: Puzzle, gate: "puzzle", hint: "Solve the puzzle to continue." },
-  { label: "Scratch", Component: ScratchCard, gate: "scratch", hint: "Scratch the card fully." },
-  { label: "Wheel", Component: SpinWheel, gate: "wheel", hint: "Spin the wheel to continue." },
-  { label: "Quiz", Component: Quiz, gate: "quiz", hint: "Finish the quiz to continue." },
+  { label: "Puzzle", Component: Puzzle},
+  { label: "Scratch", Component: ScratchCard},
+  { label: "Wheel", Component: SpinWheel},
+  { label: "Quiz", Component: Quiz},
   {
     label: "Treasure",
-    Component: TreasureHunt,
-    gate: "treasure",
-    hint: "Crack every clue to continue.",
+    Component: TreasureHunt
   },
   { label: "Secret", Component: SecretGallery },
   { label: "Finale", Component: FinaleStep },
 ];
-
 export function StepFlow({ onStart }: { onStart: () => void }) {
   const { isDone } = useProgress();
   const [index, setIndex] = useState(-1); // -1 = landing
