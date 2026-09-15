@@ -441,7 +441,7 @@ export function GuestWishesShare() {
                   event.target.value,
                 )
               }
-              maxLength={1200}
+              maxLength={5000}
               required
               rows={8}
               placeholder="Write a big, beautiful birthday wish — a favourite memory, a promise, or everything you hope this year brings..."
@@ -449,7 +449,7 @@ export function GuestWishesShare() {
             />
 
             <span className="text-muted-foreground mt-2 block text-right text-xs">
-              {message.length}/1200
+              {message.length}/5000
             </span>
           </label>
 
