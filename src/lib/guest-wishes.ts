@@ -235,7 +235,10 @@ const supabaseUrl =
 const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// EmailJS
+// --------------------------------------------------
+// EMAILJS
+// --------------------------------------------------
+
 const emailJsServiceId =
   import.meta.env.VITE_EMAILJS_SERVICE_ID;
 
@@ -251,8 +254,23 @@ const emailJsReplyTemplateId =
 const birthdayReceiverEmail =
   import.meta.env.VITE_BIRTHDAY_RECEIVER_EMAIL;
 
-console.log(birthdayReceiverEmail, emailJsServiceId, emailJsPublicKey, emailJsWishTemplateId, emailJsReplyTemplateId);
+// --------------------------------------------------
+// BIRTHDAY EMAIL CUTOFF
+// --------------------------------------------------
+//
+// Before this time:
+//   Save wishes only.
+//   Supabase Cron + Edge Function sends them.
+//
+// From this time onward:
+//   New wishes with an email are sent immediately.
+//
+// Sep 18, 2026 12:00 AM IST
+// = Sep 17, 2026 18:30 UTC
+// --------------------------------------------------
 
+const BIRTHDAY_CUTOFF =
+  new Date("2026-09-17T18:30:00Z").getTime();
 
 export const isWishWallConfigured = Boolean(
   supabaseUrl && supabaseAnonKey,
@@ -308,7 +326,6 @@ function fromDatabaseWish(
 
     createdAt: wish.created_at,
 
-    // IMPORTANT:
     // Used by GuestWishes to determine whether
     // the reply input should be displayed.
     senderEmail: wish.sender_email,
@@ -380,6 +397,10 @@ export async function publishGuestWish(input: {
     throw new Error("Please enter a birthday wish.");
   }
 
+  // --------------------------------------------------
+  // SAVE WISH TO SUPABASE
+  // --------------------------------------------------
+
   const response = await fetch(
     `${supabaseUrl}/rest/v1/guest_wishes`,
     {
@@ -427,66 +448,51 @@ export async function publishGuestWish(input: {
     fromDatabaseWish(wish);
 
   // --------------------------------------------------
-  // SEND EMAIL TO BIRTHDAY RECEIVER
+  // EMAIL FLOW
+  // --------------------------------------------------
+  //
+  // BEFORE SEP 18, 2026 12:00 AM IST:
+  //
+  // Do NOT send email here.
+  // Do NOT update scheduling columns.
+  // The Supabase Cron job will call the Edge Function.
+  //
+  // AFTER SEP 18, 2026 12:00 AM IST:
+  //
+  // Send the email immediately.
   // --------------------------------------------------
 
-  // Only send an email when the sender
-  // provided their email address.
-  // if (email) {
-  //   try {
-  //     await sendWishNotificationEmail({
-  //       wishId: guestWish.id,
-  //       name: guestWish.name,
-  //       message: guestWish.message,
-  //       gift: guestWish.gift,
-  //       senderEmail: email,
-  //     });
-  //   } catch (error) {
-  //     // Do not fail the wish submission
-  //     // if email sending fails.
-  //     console.error(
-  //       "Wish notification email failed:",
-  //       error,
-  //     );
-  //   }
-  // }
-  // --------------------------------------------------
-// SCHEDULE BIRTHDAY EMAIL
-// --------------------------------------------------
+  if (email) {
+    const now = Date.now();
 
-// September 18, 2026 at 12:00 AM IST
-// = September 17, 2026 at 18:30 UTC
-if (email) {
-  const scheduleResponse = await fetch(
-    `${supabaseUrl}/rest/v1/guest_wishes?id=eq.${encodeURIComponent(
-      guestWish.id,
-    )}`,
-    {
-      method: "PATCH",
+    if (now >= BIRTHDAY_CUTOFF) {
+      try {
+        await sendWishNotificationEmail({
+          wishId: guestWish.id,
+          name: guestWish.name,
+          message: guestWish.message,
+          gift: guestWish.gift,
+          senderEmail: email,
+        });
 
-      headers: {
-        ...headers(),
-        Prefer: "return=minimal",
-      },
-
-      body: JSON.stringify({
-        notification_scheduled_for:
-          "2026-09-17T18:30:00+00:00",
-        notification_sent_at: null,
-      }),
-    },
-  );
-
-  if (!scheduleResponse.ok) {
-    const errorText =
-      await scheduleResponse.text();
-
-    console.error(
-      "Could not schedule birthday email:",
-      errorText,
-    );
+        console.log(
+          "Wish notification sent immediately:",
+          guestWish.id,
+        );
+      } catch (error) {
+        // Do not fail the wish submission
+        // if email sending fails.
+        console.error(
+          "Immediate wish notification email failed:",
+          error,
+        );
+      }
+    } else {
+      console.log(
+        "Wish saved. Email will be handled by the scheduled birthday job.",
+      );
+    }
   }
-}
 
   return guestWish;
 }
@@ -518,7 +524,7 @@ async function sendWishNotificationEmail(input: {
     emailJsWishTemplateId,
 
     {
-      // Email recipient
+      // Birthday receiver
       to_email: birthdayReceiverEmail,
 
       // Wish information
@@ -548,7 +554,7 @@ export async function replyToWish(input: {
   reply: string;
   senderEmail: string;
   senderName: string;
-   originalMessage: string;
+  originalMessage: string;
 }) {
   if (
     !emailJsServiceId ||
@@ -561,6 +567,7 @@ export async function replyToWish(input: {
   }
 
   const reply = input.reply.trim();
+
   const senderEmail =
     input.senderEmail?.trim();
 
@@ -582,8 +589,7 @@ export async function replyToWish(input: {
 
     {
       // Send the reply to the original sender
-      sender_email: senderEmail,
-      to_email: birthdayReceiverEmail,
+      to_email: senderEmail,
 
       // Original sender's name
       name: input.senderName,
@@ -592,7 +598,7 @@ export async function replyToWish(input: {
       // Reply message
       reply,
 
-      // Useful if you want to reference the wish
+      // Useful if you want to reference the wish later
       wish_id: input.wishId,
     },
 
