@@ -100,7 +100,7 @@ export function Landing({ onStart }: { onStart: () => void }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               onClick={() => setCount(0)}
-              className="bg-festive text-primary-foreground glow group inline-flex items-center gap-3 rounded-full px-10 py-5 text-lg font-semibold transition-transform hover:scale-[1.04] active:scale-95"
+              className="bg-festive cursor-pointer text-primary-foreground glow group inline-flex items-center gap-3 rounded-full px-10 py-5 text-lg font-semibold transition-transform hover:scale-[1.04] active:scale-95"
             >
               <Sparkles className="size-5 transition-transform group-hover:rotate-12" />
               Start the Journey

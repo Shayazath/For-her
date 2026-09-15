@@ -69,7 +69,7 @@ export function SecretGallery() {
               <button
                 aria-label="Next"
                 onClick={() => setIndex((i) => (i + 1) % memories.length)}
-                className="bg-secondary hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
+                className="bg-secondary cursor-pointer hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
               >
                 <ChevronRight className="size-4" />
               </button>

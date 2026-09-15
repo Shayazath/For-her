@@ -432,24 +432,61 @@ export async function publishGuestWish(input: {
 
   // Only send an email when the sender
   // provided their email address.
-  if (email) {
-    try {
-      await sendWishNotificationEmail({
-        wishId: guestWish.id,
-        name: guestWish.name,
-        message: guestWish.message,
-        gift: guestWish.gift,
-        senderEmail: email,
-      });
-    } catch (error) {
-      // Do not fail the wish submission
-      // if email sending fails.
-      console.error(
-        "Wish notification email failed:",
-        error,
-      );
-    }
+  // if (email) {
+  //   try {
+  //     await sendWishNotificationEmail({
+  //       wishId: guestWish.id,
+  //       name: guestWish.name,
+  //       message: guestWish.message,
+  //       gift: guestWish.gift,
+  //       senderEmail: email,
+  //     });
+  //   } catch (error) {
+  //     // Do not fail the wish submission
+  //     // if email sending fails.
+  //     console.error(
+  //       "Wish notification email failed:",
+  //       error,
+  //     );
+  //   }
+  // }
+  // --------------------------------------------------
+// SCHEDULE BIRTHDAY EMAIL
+// --------------------------------------------------
+
+// September 18, 2026 at 12:00 AM IST
+// = September 17, 2026 at 18:30 UTC
+if (email) {
+  const scheduleResponse = await fetch(
+    `${supabaseUrl}/rest/v1/guest_wishes?id=eq.${encodeURIComponent(
+      guestWish.id,
+    )}`,
+    {
+      method: "PATCH",
+
+      headers: {
+        ...headers(),
+        Prefer: "return=minimal",
+      },
+
+      body: JSON.stringify({
+        notification_scheduled_for:
+          "2026-09-17T18:30:00+00:00",
+        notification_sent_at: null,
+      }),
+    },
+  );
+
+  if (!scheduleResponse.ok) {
+    const errorText =
+      await scheduleResponse.text();
+
+    console.error(
+      "Could not schedule birthday email:",
+      errorText,
+    );
   }
+}
 
   return guestWish;
 }

@@ -24,7 +24,7 @@ export function MemoryGallery() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
             whileHover={{ y: -8, rotate: 0, scale: 1.02 }}
-            className="glass-card group block w-full break-inside-avoid p-3 text-left"
+            className="glass-card group block w-full break-inside-avoid p-3 text-left cursor-grab"
           >
             <div className="overflow-hidden rounded-xl">
               <img

@@ -54,7 +54,7 @@ export function GuestWishesShare() {
     try {
       await publishGuestWish({
         name: name.trim(),
-        email: email.trim() || undefined,
+        email: email.trim() || "",
         message: message.trim(),
         gift,
       });
@@ -95,7 +95,7 @@ export function GuestWishesShare() {
     <Chapter
       id="chapter-wishes"
       eyebrow="A little love from everyone"
-      title="Leave a wish Aaiyah wants to reread"
+      title="Leave a wish for our cutest Aaliyah wants to reread"
       subtitle="Write from the heart, then send a special sticker along with it."
     >
       <form
