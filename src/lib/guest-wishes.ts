@@ -269,9 +269,10 @@ const birthdayReceiverEmail =
 // = Sep 17, 2026 18:30 UTC
 // --------------------------------------------------
 
+// const BIRTHDAY_CUTOFF =
+//   new Date("2026-09-17T18:30:00Z").getTime();
 const BIRTHDAY_CUTOFF =
-  new Date("2026-09-17T18:30:00Z").getTime();
-
+  new Date("2026-09-15T12:20:00Z").getTime();
 export const isWishWallConfigured = Boolean(
   supabaseUrl && supabaseAnonKey,
 );
