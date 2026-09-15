@@ -1,5 +1,16 @@
-import { useState, type FormEvent } from "react";
-import { Gift, Send, Sparkles, Mail } from "lucide-react";
+import {
+  useEffect,
+  useState,
+  type FormEvent,
+} from "react";
+
+import {
+  Gift,
+  Send,
+  Sparkles,
+  Mail,
+} from "lucide-react";
+
 import { Chapter } from "./Chapter";
 import { burstConfetti } from "./effects";
 
@@ -16,22 +27,105 @@ export function GuestWishesShare() {
   const [message, setMessage] = useState("");
 
   // Currently selected sticker
-  const [gift, setGift] = useState<VirtualGift>(GIFTS[0]!);
+  const [gift, setGift] =
+    useState<VirtualGift>(GIFTS[0]!);
 
   // Show 6 stickers initially
-  const [visibleGiftCount, setVisibleGiftCount] = useState(6);
+  const [visibleGiftCount, setVisibleGiftCount] =
+    useState(6);
 
-  const [isSending, setIsSending] = useState(false);
-  const [feedback, setFeedback] = useState("");
+  const [isSending, setIsSending] =
+    useState(false);
+
+  const [feedback, setFeedback] =
+    useState("");
+
+  // --------------------------------------------------
+  // BIRTHDAY COUNTDOWN
+  // --------------------------------------------------
+  //
+  // September 18, 2026
+  // 12:00 AM IST
+  //
+  // IST = UTC + 5:30
+  // Therefore:
+  // September 17, 2026
+  // 6:30 PM UTC
+  // --------------------------------------------------
+
+  const BIRTHDAY_DATE =
+    new Date(
+      "2026-09-17T18:30:00Z",
+    ).getTime();
+
+  const getTimeLeft = () => {
+    const difference =
+      BIRTHDAY_DATE - Date.now();
+
+    if (difference <= 0) {
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        expired: true,
+      };
+    }
+
+    return {
+      days: Math.floor(
+        difference /
+          (1000 * 60 * 60 * 24),
+      ),
+
+      hours: Math.floor(
+        (difference /
+          (1000 * 60 * 60)) %
+          24,
+      ),
+
+      minutes: Math.floor(
+        (difference /
+          (1000 * 60)) %
+          60,
+      ),
+
+      seconds: Math.floor(
+        (difference / 1000) %
+          60,
+      ),
+
+      expired: false,
+    };
+  };
+
+  const [timeLeft, setTimeLeft] =
+    useState(getTimeLeft);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(getTimeLeft());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   // --------------------------------------------------
   // SEND WISH
   // --------------------------------------------------
 
-  const submit = async (event: FormEvent) => {
+  const submit = async (
+    event: FormEvent,
+  ) => {
     event.preventDefault();
 
-    if (!name.trim() || !message.trim() || isSending) {
+    if (
+      !name.trim() ||
+      !message.trim() ||
+      isSending
+    ) {
       return;
     }
 
@@ -40,10 +134,15 @@ export function GuestWishesShare() {
       const emailRegex =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailRegex.test(email.trim())) {
+      if (
+        !emailRegex.test(
+          email.trim(),
+        )
+      ) {
         setFeedback(
           "Please enter a valid email address.",
         );
+
         return;
       }
     }
@@ -86,8 +185,12 @@ export function GuestWishesShare() {
   // --------------------------------------------------
 
   const loadMoreStickers = () => {
-    setVisibleGiftCount((current) =>
-      Math.min(current + 6, GIFTS.length),
+    setVisibleGiftCount(
+      (current) =>
+        Math.min(
+          current + 6,
+          GIFTS.length,
+        ),
     );
   };
 
@@ -136,7 +239,9 @@ export function GuestWishesShare() {
             <input
               value={name}
               onChange={(event) =>
-                setName(event.target.value)
+                setName(
+                  event.target.value,
+                )
               }
               maxLength={80}
               required
@@ -164,7 +269,9 @@ export function GuestWishesShare() {
                 type="email"
                 value={email}
                 onChange={(event) =>
-                  setEmail(event.target.value)
+                  setEmail(
+                    event.target.value,
+                  )
                 }
                 maxLength={254}
                 placeholder="Your email, if you'd like a reply"
@@ -173,9 +280,150 @@ export function GuestWishesShare() {
             </div>
 
             <p className="text-muted-foreground mt-2 text-xs">
-              Optional — leave it empty if you don't want a reply.
+              Optional — leave your email if you'd like Aaliyah to reply to you.
             </p>
           </label>
+
+          {/* ==================================================
+              BIRTHDAY DELIVERY COUNTDOWN
+              ================================================== */}
+
+          {!timeLeft.expired ? (
+            <div className="relative mt-5 overflow-hidden rounded-2xl border border-gold/30 bg-gold/5 p-4 sm:p-5">
+
+              {/* Animated background glow */}
+              <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-gold/10 blur-3xl animate-pulse" />
+
+              <div className="pointer-events-none absolute -bottom-10 -left-10 size-32 rounded-full bg-gold/10 blur-3xl animate-pulse" />
+
+              <div className="relative">
+
+                {/* Header */}
+                <div className="flex items-center gap-3">
+
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold/15">
+                    <span className="animate-pulse text-xl">
+                      💌
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-bold text-gold sm:text-base">
+                      Your wish is on its way to Aaliyah
+                    </p>
+
+                    <p className="text-muted-foreground mt-0.5 text-xs">
+                      We're collecting all the birthday wishes for her special night.
+                    </p>
+                  </div>
+
+                </div>
+
+                {/* Countdown */}
+                <div className="mt-4 grid grid-cols-4 gap-2 sm:gap-3">
+
+                  {/* DAYS */}
+                  <div className="rounded-xl border border-gold/20 bg-background/40 px-2 py-3 text-center backdrop-blur-sm">
+                    <div className="text-xl font-bold tabular-nums text-gold sm:text-2xl">
+                      {String(
+                        timeLeft.days,
+                      ).padStart(2, "0")}
+                    </div>
+
+                    <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
+                      Days
+                    </div>
+                  </div>
+
+                  {/* HOURS */}
+                  <div className="rounded-xl border border-gold/20 bg-background/40 px-2 py-3 text-center backdrop-blur-sm">
+                    <div className="text-xl font-bold tabular-nums text-gold sm:text-2xl">
+                      {String(
+                        timeLeft.hours,
+                      ).padStart(2, "0")}
+                    </div>
+
+                    <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
+                      Hours
+                    </div>
+                  </div>
+
+                  {/* MINUTES */}
+                  <div className="rounded-xl border border-gold/20 bg-background/40 px-2 py-3 text-center backdrop-blur-sm">
+                    <div className="text-xl font-bold tabular-nums text-gold sm:text-2xl">
+                      {String(
+                        timeLeft.minutes,
+                      ).padStart(2, "0")}
+                    </div>
+
+                    <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
+                      Min
+                    </div>
+                  </div>
+
+                  {/* SECONDS */}
+                  <div className="rounded-xl border border-gold/30 bg-gold/10 px-2 py-3 text-center shadow-[var(--shadow-gold)]">
+                    <div className="text-xl font-bold tabular-nums text-gold animate-pulse sm:text-2xl">
+                      {String(
+                        timeLeft.seconds,
+                      ).padStart(2, "0")}
+                    </div>
+
+                    <div className="mt-1 text-[9px] font-semibold uppercase tracking-wider text-gold sm:text-[10px]">
+                      Sec
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Delivery message */}
+                <div className="mt-4 flex items-center justify-center gap-1.5 text-center">
+
+                  <span className="animate-pulse text-sm">
+                    ✨
+                  </span>
+
+                  <p className="text-xs text-muted-foreground">
+                    She'll receive these wishes on{" "}
+                    <span className="font-semibold text-gold">
+                      September 18 at midnight
+                    </span>
+                  </p>
+
+                  <span className="animate-pulse text-sm">
+                    ✨
+                  </span>
+
+                </div>
+
+              </div>
+            </div>
+          ) : (
+            /* ==================================================
+               AFTER COUNTDOWN
+               ================================================== */
+
+            <div className="relative mt-5 overflow-hidden rounded-2xl border border-gold/40 bg-gold/10 p-5 text-center">
+
+              <div className="pointer-events-none absolute inset-0 bg-gold/5 animate-pulse" />
+
+              <div className="relative">
+
+                <div className="text-3xl animate-bounce">
+                  💌✨
+                </div>
+
+                <p className="mt-2 text-sm font-bold text-gold sm:text-base">
+                  Your wish will reach Aaliyah instantly!
+                </p>
+
+                <p className="text-muted-foreground mt-1 text-xs">
+                  New birthday wishes are now delivered directly to her.
+                </p>
+
+              </div>
+            </div>
+          )}
 
           {/* ==================================================
               MESSAGE
@@ -189,7 +437,9 @@ export function GuestWishesShare() {
             <textarea
               value={message}
               onChange={(event) =>
-                setMessage(event.target.value)
+                setMessage(
+                  event.target.value,
+                )
               }
               maxLength={1200}
               required
@@ -213,8 +463,12 @@ export function GuestWishesShare() {
             </legend>
 
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+
               {GIFTS
-                .slice(0, visibleGiftCount)
+                .slice(
+                  0,
+                  visibleGiftCount,
+                )
                 .map((item) => {
                   const selected =
                     gift.id === item.id;
@@ -226,7 +480,9 @@ export function GuestWishesShare() {
                       onClick={() =>
                         setGift(item)
                       }
-                      aria-pressed={selected}
+                      aria-pressed={
+                        selected
+                      }
                       className={`
                         group
                         relative
@@ -251,6 +507,7 @@ export function GuestWishesShare() {
                         }
                       `}
                     >
+
                       {/* SELECTED CHECK */}
 
                       {selected && (
@@ -279,24 +536,31 @@ export function GuestWishesShare() {
                       <span className="text-muted-foreground mt-1 block text-xs leading-5">
                         {item.note}
                       </span>
+
                     </button>
                   );
                 })}
+
             </div>
 
             {/* ==================================================
                 LOAD MORE
                 ================================================== */}
 
-            {visibleGiftCount < GIFTS.length && (
+            {visibleGiftCount <
+              GIFTS.length && (
               <div className="mt-5 flex justify-center">
+
                 <button
                   type="button"
-                  onClick={loadMoreStickers}
+                  onClick={
+                    loadMoreStickers
+                  }
                   className="cursor-pointer rounded-full border border-gold/40 bg-gold/10 px-6 py-2.5 text-sm font-medium text-gold transition-all hover:-translate-y-0.5 hover:bg-gold/20 hover:shadow-[var(--shadow-gold)]"
                 >
                   Load more stickers
                 </button>
+
               </div>
             )}
 
@@ -310,6 +574,7 @@ export function GuestWishesShare() {
               )}{" "}
               of {GIFTS.length} stickers
             </p>
+
           </fieldset>
 
           {/* ==================================================
@@ -319,9 +584,15 @@ export function GuestWishesShare() {
           {feedback && (
             <p
               className={`mt-4 text-center text-sm ${
-                feedback.includes("could not") ||
-                feedback.includes("valid") ||
-                feedback.includes("error")
+                feedback.includes(
+                  "could not",
+                ) ||
+                feedback.includes(
+                  "valid",
+                ) ||
+                feedback.includes(
+                  "error",
+                )
                   ? "text-destructive"
                   : "text-muted-foreground"
               }`}
@@ -340,7 +611,7 @@ export function GuestWishesShare() {
             <p className="text-muted-foreground text-sm">
               {isWishWallConfigured
                 ? email.trim()
-                  ? "They can reply to you by email."
+                  ? "Aaliyah can reply to you by email."
                   : "Your email is optional."
                 : "The shared wall is being connected."}
             </p>
@@ -355,6 +626,7 @@ export function GuestWishesShare() {
               }
               className="bg-festive text-primary-foreground inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 font-semibold transition-transform hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
+
               <Gift className="size-4" />
 
               {isSending
@@ -362,8 +634,11 @@ export function GuestWishesShare() {
                 : "Send wish & sticker"}
 
               <Send className="size-4" />
+
             </button>
+
           </div>
+
         </div>
       </form>
     </Chapter>

@@ -583,15 +583,18 @@ export async function replyToWish(input: {
       "Please enter a reply.",
     );
   }
+    
+    
+
 
   await emailjs.send(
     emailJsServiceId,
     emailJsReplyTemplateId,
+    
 
     {
       // Send the reply to the original sender
       to_email: senderEmail,
-      sender_email: birthdayReceiverEmail,
 
       // Original sender's name
       name: input.senderName,
