@@ -130,22 +130,6 @@ export function MusicPlayer({
     useState(false);
 
   // ==================================================
-  // DRAG STATE
-  // ==================================================
-
-  /**
-   * Whether the player has been manually moved.
-   *
-   * We keep the position in pixels so it stays where
-   * the user placed it even when it minimizes.
-   */
-  const [position, setPosition] =
-    useState<{
-      x: number;
-      y: number;
-    } | null>(null);
-
-  // ==================================================
   // REFS
   // ==================================================
 
@@ -399,7 +383,6 @@ export function MusicPlayer({
       !playing
     ) {
       play();
-
       revealPlayer();
     }
 
@@ -448,24 +431,6 @@ export function MusicPlayer({
   }
 
   // ==================================================
-  // DRAG POSITION
-  // ==================================================
-
-  /**
-   * When the player has not been dragged,
-   * Tailwind controls its default position.
-   *
-   * Once dragged, we use x/y.
-   */
-  const dragStyle =
-    position
-      ? {
-          x: position.x,
-          y: position.y,
-        }
-      : undefined;
-
-  // ==================================================
   // RENDER
   // ==================================================
 
@@ -486,10 +451,6 @@ export function MusicPlayer({
 
           dragElastic={0.05}
 
-          /**
-           * Don't allow the player to be dragged
-           * completely outside the screen.
-           */
           dragConstraints={{
             top: -300,
             left: -300,
@@ -519,13 +480,9 @@ export function MusicPlayer({
             ease: "easeOut",
           }}
 
-          style={dragStyle}
-
           /**
-           * Important:
-           * touch-action prevents dragging from
-           * fighting with page scrolling when the
-           * player itself is touched.
+           * Mobile position is above the
+           * bottom navigation / Next button.
            */
           className="
             glass-card
@@ -561,10 +518,19 @@ export function MusicPlayer({
 
             {/* MUSIC ICON */}
 
-            <span className="bg-festive text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full">
-
+            <span
+              className="
+                bg-festive
+                text-primary-foreground
+                flex
+                size-8
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+              "
+            >
               <Music className="size-4" />
-
             </span>
 
             {/* TRACK NAME */}
@@ -626,8 +592,15 @@ export function MusicPlayer({
               PROGRESS
               ================================================== */}
 
-          <div className="bg-secondary mt-3 h-1 overflow-hidden rounded-full">
-
+          <div
+            className="
+              bg-secondary
+              mt-3
+              h-1
+              overflow-hidden
+              rounded-full
+            "
+          >
             <div
               className="
                 bg-festive
@@ -640,14 +613,21 @@ export function MusicPlayer({
                 width: `${progress}%`,
               }}
             />
-
           </div>
 
           {/* ==================================================
               CONTROLS
               ================================================== */}
 
-          <div className="mt-3 flex items-center justify-between gap-2">
+          <div
+            className="
+              mt-3
+              flex
+              items-center
+              justify-between
+              gap-2
+            "
+          >
 
             {/* PREVIOUS */}
 
@@ -763,9 +743,21 @@ export function MusicPlayer({
 
             {/* VOLUME */}
 
-            <div className="flex min-w-0 items-center gap-1.5">
-
-              <Volume2 className="text-muted-foreground size-4 shrink-0" />
+            <div
+              className="
+                flex
+                min-w-0
+                items-center
+                gap-1.5
+              "
+            >
+              <Volume2
+                className="
+                  text-muted-foreground
+                  size-4
+                  shrink-0
+                "
+              />
 
               <input
                 aria-label="Volume"
@@ -788,7 +780,6 @@ export function MusicPlayer({
                   sm:w-16
                 "
               />
-
             </div>
 
           </div>
@@ -823,11 +814,22 @@ export function MusicPlayer({
             duration: 0.25,
           }}
 
+          /*
+           * IMPORTANT:
+           *
+           * On mobile:
+           * bottom-20 = moves the music icon
+           * above the Next button.
+           *
+           * On desktop:
+           * bottom-4 = normal bottom position.
+           */
           className="
             fixed
-            bottom-4
+            bottom-20
             right-3
             z-50
+            sm:bottom-4
             sm:right-4
           "
         >
@@ -875,12 +877,36 @@ export function MusicPlayer({
             {/* PLAYING INDICATOR */}
 
             {playing && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-3">
+              <span
+                className="
+                  absolute
+                  -right-0.5
+                  -top-0.5
+                  flex
+                  size-3
+                "
+              >
+                <span
+                  className="
+                    absolute
+                    inline-flex
+                    size-full
+                    animate-ping
+                    rounded-full
+                    bg-gold
+                    opacity-60
+                  "
+                />
 
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-gold opacity-60" />
-
-                <span className="relative inline-flex size-3 rounded-full bg-gold" />
-
+                <span
+                  className="
+                    relative
+                    inline-flex
+                    size-3
+                    rounded-full
+                    bg-gold
+                  "
+                />
               </span>
             )}
 
