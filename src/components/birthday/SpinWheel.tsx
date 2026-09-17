@@ -498,7 +498,7 @@ function HiddenPhoto() {
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-white/20 shadow-xl">
         <img
-          src="/birthday/hidden-photo.jpg"
+          src="/prettyface/sg23.png"
           alt="A hidden memory"
           className="h-auto w-full object-cover"
         />

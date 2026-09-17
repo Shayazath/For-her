@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Check, X, X as CloseIcon } from "lucide-react";
-import { memories, quiz } from "@/data/birthday";
+import { secretgal, quiz } from "@/data/birthday";
 import { Chapter } from "./Chapter";
 import { burstConfetti } from "./effects";
 import { useProgress } from "./progress";
@@ -10,7 +10,7 @@ export function Quiz() {
   const { complete } = useProgress();
 
   const [selectedGift, setSelectedGift] = useState<
-    (typeof memories)[number] | null
+    (typeof secretgal)[number] | null
   >(null);
 
   const [step, setStep] = useState(0);
@@ -45,7 +45,7 @@ export function Quiz() {
   };
 
   // Always show all 3 gifts
-  const gifts = memories.slice(0, 3);
+  const gifts = secretgal.slice(0, 3);
 
   return (
     <Chapter
