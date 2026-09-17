@@ -8,10 +8,10 @@ import { useProgress } from "./progress";
 const TOTAL = 12;
 const PRIZE_INDEXES = [1, 4, 6, 9];
 const PRIZE_MESSAGES = [
-  "You laughed so hard here you cried.",
-  "Our favourite kind of evening.",
-  "I kept this one just for today.",
-  "Still my phone wallpaper.",
+  "The first gift I gave you but you just asked for a single flower.",
+  "The unreachable hands reached out to me. 🦋❤️",
+  "The moment I started feeling possessive about the little things that mattered to us. ❤️.",
+  "How cute we are ❤️",
 ];
 
 export function BalloonGame() {
