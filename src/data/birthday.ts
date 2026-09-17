@@ -779,7 +779,7 @@ export const treasureClues = [
   },
   {
     clue: "I love you how many times?",
-    answer: "Infinate",
+    answer: "Infinite",
     hint: "endless",
   }
 ];
