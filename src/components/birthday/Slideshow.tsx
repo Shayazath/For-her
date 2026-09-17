@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
-import { memories } from "@/data/birthday";
+import { memoriesslide } from "@/data/birthday";
 import { Chapter } from "./Chapter";
 
 export function Slideshow() {
   const [index, setIndex] = useState(0);
   const [auto, setAuto] = useState(true);
-  const current = memories[index] ?? memories[0]!;
+  const current = memoriesslide[index] ?? memoriesslide[0]!;
 
   useEffect(() => {
     if (!auto) return;
-    const id = window.setInterval(() => setIndex((i) => (i + 1) % memories.length), 4200);
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % memoriesslide.length), 4200);
     return () => window.clearInterval(id);
   }, [auto]);
 
   const go = (dir: number) =>
-    setIndex((i) => (i + dir + memories.length) % memories.length);
+    setIndex((i) => (i + dir + memoriesslide.length) % memoriesslide.length);
 
   return (
     <Chapter
@@ -86,7 +86,7 @@ export function Slideshow() {
           </button>
 
           <div className="ml-3 flex flex-1 gap-1.5">
-            {memories.map((m, i) => (
+            {memoriesslide.map((m, i) => (
               <button
                 key={m.id}
                 aria-label={`Go to photo ${i + 1}`}

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { memories } from "@/data/birthday";
+import { gifto } from "@/data/birthday";
 import { Chapter } from "./Chapter";
 import { burstConfetti } from "./effects";
 import { useProgress } from "./progress";
@@ -67,7 +67,7 @@ export function BalloonGame() {
               key={b.id}
               aria-label="Pop balloon"
               onClick={() => pop(b.id, b.prizeIdx)}
-              className="animate-rise absolute bottom-0 z-10"
+              className="animate-rise absolute bottom-0 z-10 cursor-grab"
               style={{
                 left: `${b.left}%`,
                 animationDelay: `${b.delay}s`,
@@ -100,7 +100,7 @@ export function BalloonGame() {
                 className="glass-card glow w-full max-w-xs p-4 text-center"
               >
                 {(() => {
-                  const photo = memories[reveal.prizeIdx % memories.length]!;
+                  const photo = gifto[reveal.prizeIdx % gifto.length]!;
                   return (
                     <img
                       src={photo.src}

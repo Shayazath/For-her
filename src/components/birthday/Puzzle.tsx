@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { memories } from "@/data/birthday";
+import { gifto } from "@/data/birthday";
 import { Chapter } from "./Chapter";
 import { burstConfetti } from "./effects";
 import { useProgress } from "./progress";
 
 const SIZE = 3;
-const photo = memories[1]!;
+const photo = gifto[0]!;
 
 function shuffled(): number[] {
   const order = Array.from({ length: SIZE * SIZE }, (_, i) => i);

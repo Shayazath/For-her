@@ -4,7 +4,7 @@ import { Cake as CakeIcon, Wind } from "lucide-react";
 import { Chapter } from "./Chapter";
 import { bigCelebration, fireworksBurst, burstConfetti } from "./effects";
 import { useProgress } from "./progress";
-import { celebrant, memories } from "@/data/birthday";
+import { celebrant, secretgal } from "@/data/birthday";
 
 const CANDLES = [0, 1, 2, 3, 4];
 
@@ -21,7 +21,7 @@ function PhotoPops({ active, count = 14 }: { active: boolean; count?: number }) 
           side === 2 ? rand(3, 16) : side === 3 ? rand(72, 88) : rand(8, 80);
         return {
           id: i,
-          src: memories[i % memories.length]!.src,
+          src: secretgal[i % secretgal.length]!.src,
           left,
           top,
           size: 88 + Math.random() * 72,
@@ -162,7 +162,7 @@ export function Cake() {
           {!blown ? (
             <button
               onClick={blow}
-              className="bg-festive text-primary-foreground glow inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold transition-transform hover:scale-105 active:scale-95"
+              className="bg-festive text-primary-foreground cursor-pointer glow inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold transition-transform hover:scale-105 active:scale-95"
             >
               <Wind className="size-5" /> Blow out the candles
             </button>

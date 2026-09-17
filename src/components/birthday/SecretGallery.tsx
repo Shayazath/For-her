@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Lock, ChevronLeft, ChevronRight } from "lucide-react";
-import { memories } from "@/data/birthday";
+import { secretgal } from "@/data/birthday";
 import { Chapter } from "./Chapter";
 import { useProgress } from "./progress";
 
 export function SecretGallery() {
   const { secretUnlocked, gamesDone } = useProgress();
+  // const secretUnlocked = true
   const [index, setIndex] = useState(0);
-  const photo = memories[index] ?? memories[0]!;
+  const photo = secretgal[index] ?? secretgal[0]!;
 
   return (
     <Chapter
@@ -52,13 +53,13 @@ export function SecretGallery() {
               width={photo.width}
               height={photo.height}
               loading="lazy"
-              className="h-[26rem] w-full rounded-xl object-cover"
+              className="h-[36rem] w-full rounded-xl object-contain bg-black/20"
             />
             <div className="flex items-center justify-between gap-4 px-2 pt-4">
               <button
                 aria-label="Previous"
-                onClick={() => setIndex((i) => (i - 1 + memories.length) % memories.length)}
-                className="bg-secondary hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
+                onClick={() => setIndex((i) => (i - 1 + secretgal.length) % secretgal.length)}
+                className="bg-secondary cursor-pointer hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
               >
                 <ChevronLeft className="size-4" />
               </button>
@@ -68,7 +69,7 @@ export function SecretGallery() {
               </div>
               <button
                 aria-label="Next"
-                onClick={() => setIndex((i) => (i + 1) % memories.length)}
+                onClick={() => setIndex((i) => (i + 1) % secretgal.length)}
                 className="bg-secondary cursor-pointer hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
               >
                 <ChevronRight className="size-4" />
@@ -77,12 +78,12 @@ export function SecretGallery() {
           </div>
 
           <div className="mt-5 grid grid-cols-6 gap-2">
-            {memories.map((m, i) => (
+            {secretgal.map((m, i) => (
               <motion.button
                 key={m.id}
                 whileHover={{ y: -5 }}
                 onClick={() => setIndex(i)}
-                className={`overflow-hidden rounded-lg ${i === index ? "ring-primary ring-2" : ""}`}
+                className={`overflow-hidden cursor-pointer rounded-lg ${i === index ? "ring-primary ring-2" : ""}`}
               >
                 <img
                   src={m.src}

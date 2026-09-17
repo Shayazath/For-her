@@ -19,7 +19,11 @@ export function TreasureHunt() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!clue) return;
-    if (guess.trim().toLowerCase() === clue.answer) {
+    console.log(guess);
+    console.log(clue.answer);
+    
+    
+    if (guess.trim().toLowerCase() === clue.answer.trim().toLowerCase()) {
       setGuess("");
       setWrong(false);
       setShowHint(false);
@@ -74,7 +78,7 @@ export function TreasureHunt() {
               />
               <button
                 type="submit"
-                className="bg-festive text-primary-foreground rounded-full px-7 py-3 font-semibold transition-transform hover:scale-105 active:scale-95"
+                className="bg-festive cursor-pointer text-primary-foreground rounded-full px-7 py-3 font-semibold transition-transform hover:scale-105 active:scale-95"
               >
                 Unlock
               </button>

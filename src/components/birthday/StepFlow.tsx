@@ -180,7 +180,7 @@ export function StepFlow({ onStart }: { onStart: () => void }) {
         <button
           onClick={() => setIndex((i) => Math.max(0, i - 1))}
           disabled={index === 0}
-          className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm transition-colors disabled:opacity-40"
+          className="text-muted-foreground cursor-pointer hover:text-foreground px-3 py-2 text-sm transition-colors disabled:opacity-40"
         >
           Back
         </button>
@@ -191,7 +191,7 @@ export function StepFlow({ onStart }: { onStart: () => void }) {
         ) : unlocked ? (
           <button
             onClick={() => setIndex((i) => Math.min(STEPS.length - 1, i + 1))}
-            className="bg-festive text-primary-foreground flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold"
+            className="bg-festive cursor-pointer text-primary-foreground flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             Next <ArrowRight className="size-4" />
           </button>
