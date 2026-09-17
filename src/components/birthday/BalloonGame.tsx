@@ -10,8 +10,8 @@ const PRIZE_INDEXES = [1, 4, 6, 9];
 const PRIZE_MESSAGES = [
   "The first gift I gave you but you just asked for a single flower.",
   "The unreachable hands reached out to me. 🦋❤️",
-  "The moment I started feeling possessive about the little things that mattered to us. ❤️.",
   "How cute we are ❤️",
+  "The moment I started feeling possessive about the little things that mattered to us. ❤️.",
 ];
 
 export function BalloonGame() {
