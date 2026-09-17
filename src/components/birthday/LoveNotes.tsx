@@ -29,7 +29,7 @@ export function LoveNotes() {
                 <motion.div
                   animate={{ rotateY: isFlipped ? 180 : 0 }}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative h-44 w-full [transform-style:preserve-3d]"
+                  className="relative h-44 w-full [transform-style:preserve-3d] cursor-grab"
                 >
                   <div className="glass-card absolute inset-0 flex items-center justify-center p-7 text-center [backface-visibility:hidden]">
                     <p className="font-display text-xl leading-snug">{note.front}</p>

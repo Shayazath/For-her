@@ -66,7 +66,7 @@ export function Slideshow() {
           <button
             aria-label="Previous photo"
             onClick={() => go(-1)}
-            className="bg-secondary hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
+            className="bg-secondary cursor-pointer hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
           >
             <ChevronLeft className="size-4" />
           </button>
@@ -80,7 +80,7 @@ export function Slideshow() {
           <button
             aria-label="Next photo"
             onClick={() => go(1)}
-            className="bg-secondary hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
+            className="bg-secondary cursor-pointer hover:bg-accent flex size-10 items-center justify-center rounded-full transition-colors"
           >
             <ChevronRight className="size-4" />
           </button>
